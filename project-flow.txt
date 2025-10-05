@@ -1,0 +1,219 @@
+# Blockchain-Based E-Voting System - Project Flow & File Explanation
+
+## 🎯 PROJECT OVERVIEW
+This is a secure electronic voting system that uses blockchain technology to ensure votes are tamper-proof and transparent. It prevents fraud, double-voting, and allows voters to verify their votes were recorded correctly.
+
+## 🏗️ PROJECT STRUCTURE & FLOW
+
+### 1. MAIN APPLICATION ENTRY POINT
+**File: BlockchainVotingSystemApplication.java**
+- **Why made**: This is the starting point of our entire application
+- **What it does**: Launches the Spring Boot application and enables all the features
+- **Simple explanation**: Like the "on" button for our voting system - without this, nothing runs
+
+### 2. CONFIGURATION FILES
+
+**File: pom.xml**
+- **Why made**: Maven needs this to understand our project and download required libraries
+- **What it does**: Lists all dependencies (Spring Boot, database drivers, security libraries, etc.)
+- **Simple explanation**: Shopping list of tools our project needs to work
+
+**File: application.properties**
+- **Why made**: Contains all settings and configurations
+- **What it does**: Database connection details, security keys, server port, blockchain settings
+- **Simple explanation**: Control panel with all the knobs and switches for our system
+
+**File: CorsConfig.java**
+- **Why made**: Web browsers block requests from different websites for security
+- **What it does**: Allows our frontend (web interface) to communicate with our backend
+- **Simple explanation**: Permission slip allowing our voting website to talk to the server
+
+**File: SecurityConfig.java**
+- **Why made**: Voting systems must be extremely secure
+- **What it does**: Sets up JWT authentication, password encryption, and access controls
+- **Simple explanation**: Security guard that checks IDs and passwords before allowing access
+
+### 3. DATA MODELS (Database Tables)
+
+**File: User.java**
+- **Why made**: We need to store information about voters, admins, and candidates
+- **What it does**: Represents user accounts with roles (voter/admin/candidate)
+- **Simple explanation**: Profile card for each person using the system
+
+**File: Election.java**
+- **Why made**: Elections have specific dates, names, and rules
+- **What it does**: Stores election details like start/end dates and descriptions
+- **Simple explanation**: Event details for each voting period
+
+**File: Candidate.java**
+- **Why made**: People need to know who they're voting for
+- **What it does**: Stores candidate information and links them to elections
+- **Simple explanation**: Contestant profile in the election
+
+**File: Vote.java**
+- **Why made**: We must record every vote securely
+- **What it does**: Stores encrypted vote data with blockchain references
+- **Simple explanation**: Secure digital ballot box entry
+
+### 4. DATA ACCESS LAYER (Repositories)
+
+**File: UserRepository.java**
+- **Why made**: Need to save and find user information in database
+- **What it does**: Provides methods to create, read, update, delete users
+- **Simple explanation**: Librarian for user data - helps find and store user information
+
+**File: ElectionRepository.java**
+- **Why made**: Elections need to be stored and retrieved
+- **What it does**: Database operations for election management
+- **Simple explanation**: Filing cabinet for election records
+
+**File: CandidateRepository.java**
+- **Why made**: Candidates need to be managed in the database
+- **What it does**: CRUD operations for candidate data
+- **Simple explanation**: Storage system for candidate information
+
+**File: VoteRepository.java**
+- **Why made**: Votes are the most critical data - must be stored securely
+- **What it does**: Secure storage and retrieval of vote records
+- **Simple explanation**: Fort Knox for vote data - extremely secure storage
+
+### 5. BUSINESS LOGIC LAYER (Services)
+
+**File: UserService.java**
+- **Why made**: User operations need business rules and validation
+- **What it does**: Handles user registration, login, and profile management
+- **Simple explanation**: User manager - handles all user-related tasks and rules
+
+**File: ElectionService.java**
+- **Why made**: Elections have complex rules (dates, status, etc.)
+- **What it does**: Manages election lifecycle and business logic
+- **Simple explanation**: Election coordinator - ensures elections run properly
+
+**File: VotingService.java**
+- **Why made**: Voting is the core function and must be perfectly secure
+- **What it does**: Processes votes, prevents double-voting, records on blockchain
+- **Simple explanation**: Vote processor - the heart of the voting system
+
+**File: CustomUserDetailsService.java**
+- **Why made**: Spring Security needs to load user details for authentication
+- **What it does**: Connects our user database with Spring Security
+- **Simple explanation**: Bridge between our users and the security system
+
+### 6. SECURITY COMPONENTS
+
+**File: JwtTokenProvider.java**
+- **Why made**: We use JWT tokens for secure authentication
+- **What it does**: Creates and validates JWT tokens for user sessions
+- **Simple explanation**: Token factory - creates secure access passes for users
+
+**File: JwtAuthenticationFilter.java**
+- **Why made**: Every request needs to be checked for valid authentication
+- **What it does**: Intercepts requests and validates JWT tokens
+- **Simple explanation**: Security checkpoint - checks every visitor has a valid pass
+
+**File: JwtAuthenticationEntryPoint.java**
+- **Why made**: Handle unauthorized access attempts gracefully
+- **What it does**: Returns proper error messages for failed authentication
+- **Simple explanation**: Polite security guard - explains why access was denied
+
+### 7. API CONTROLLERS (REST Endpoints)
+
+**File: AdminController.java**
+- **Why made**: Administrators need tools to manage the system
+- **What it does**: Provides endpoints for user management and system administration
+- **Simple explanation**: Admin control panel - tools for system managers
+
+**File: ElectionController.java**
+- **Why made**: Users need to view elections and candidates
+- **What it does**: REST endpoints for election and candidate information
+- **Simple explanation**: Information booth - provides election details to users
+
+**File: VotingController.java**
+- **Why made**: The actual voting process needs API endpoints
+- **What it does**: Handles vote submission and retrieval
+- **Simple explanation**: Voting booth - where users cast their votes
+
+### 8. DATA TRANSFER OBJECTS (DTOs)
+
+**File: LoginRequest.java**
+- **Why made**: Need a standard format for login data
+- **What it does**: Carries username and password from client to server
+- **Simple explanation**: Login form data container
+
+**File: RegisterRequest.java**
+- **Why made**: User registration needs structured data
+- **What it does**: Carries new user information during registration
+- **Simple explanation**: Registration form data container
+
+### 9. DEVELOPMENT & DEPLOYMENT FILES
+
+**File: README.md**
+- **Why made**: Developers and users need to understand the project
+- **What it does**: Comprehensive documentation with setup instructions
+- **Simple explanation**: User manual and guide for the project
+
+**File: commands.txt**
+- **Why made**: Complex setup process needs clear step-by-step instructions
+- **What it does**: Lists all commands needed to run the project with explanations
+- **Simple explanation**: Recipe book for setting up and running the system
+
+**File: requirements.txt**
+- **Why made**: Python development tools need specific versions
+- **What it does**: Lists Python packages for development environment
+- **Simple explanation**: Shopping list for Python tools
+
+**File: .gitignore**
+- **Why made**: Don't want to accidentally commit sensitive or unnecessary files
+- **What it does**: Tells Git which files to ignore (passwords, build files, etc.)
+- **Simple explanation**: Filter that keeps secret and temporary files out of the repository
+
+## 🔄 HOW THE SYSTEM WORKS (Flow)
+
+### User Registration Flow:
+1. User fills registration form → RegisterRequest.java
+2. Request goes to AdminController.java
+3. Controller calls UserService.java
+4. Service validates data and calls UserRepository.java
+5. Repository saves to database (User.java model)
+6. Password gets encrypted by SecurityConfig.java
+
+### Authentication Flow:
+1. User logs in → LoginRequest.java
+2. Request goes to (authentication endpoint in SecurityConfig.java)
+3. CustomUserDetailsService.java loads user from database
+4. JwtTokenProvider.java creates secure token
+5. Token sent back to user for future requests
+
+### Voting Flow:
+1. User requests election info → ElectionController.java
+2. Controller gets data from ElectionService.java
+3. Service retrieves from ElectionRepository.java and CandidateRepository.java
+4. User sees candidates and votes → VotingController.java
+5. Controller validates with VotingService.java
+6. Service checks for double-voting and saves to VoteRepository.java
+7. Vote gets recorded on blockchain (future integration)
+
+### Security Flow:
+1. Every request passes through JwtAuthenticationFilter.java
+2. Filter validates JWT token with JwtTokenProvider.java
+3. If invalid, JwtAuthenticationEntryPoint.java returns error
+4. Valid requests proceed to controllers with user information
+
+## 🎯 WHY BLOCKCHAIN?
+
+The blockchain integration (planned for future) will:
+- Make votes immutable (can't be changed)
+- Provide transparency (anyone can verify results)
+- Prevent tampering (cryptographic security)
+- Enable vote verification (users can check their vote was recorded)
+
+## 🚀 DEPLOYMENT FLOW
+
+1. **Development**: Use commands.txt to set up local environment
+2. **Build**: Maven compiles everything using pom.xml
+3. **Database**: MySQL creates tables from entity models
+4. **Security**: JWT and encryption protect all endpoints
+5. **Blockchain**: Web3j connects to Ethereum network (future)
+6. **Production**: Application runs on configured port with all security enabled
+
+This project follows clean architecture principles with clear separation of concerns, making it maintainable, secure, and scalable for real-world electronic voting systems.
