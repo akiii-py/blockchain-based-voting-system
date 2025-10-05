@@ -1,0 +1,172 @@
+# Blockchain-Based E-Voting System - Setup and Run Commands
+
+## Prerequisites Setup
+# Install Java 17 (if not already installed)
+# Download from: https://adoptium.net/temurin/releases/
+
+# Install Maven 3.6+ (if not already installed)
+# Download from: https://maven.apache.org/download.cgi
+
+# Install MySQL 8.0+ (if not already installed)
+# Download from: https://dev.mysql.com/downloads/mysql/
+
+# Install Ganache (Ethereum local blockchain) for development
+# Download from: https://trufflesuite.com/ganache/
+
+## Project Setup Commands
+
+### 1. Navigate to project directory
+cd "/Users/akshat/Desktop/Projects/Blockchain Based Voting system"
+# Changes to the project root directory
+
+### 2. Activate Python virtual environment
+source venv/bin/activate
+# Activates the Python virtual environment for dependency isolation
+
+### 3. Install Python dependencies (if needed)
+pip install -r requirements.txt
+# Installs all Python packages listed in requirements.txt for development tools
+
+### 4. Create MySQL database
+mysql -u root -p
+# Logs into MySQL command line
+CREATE DATABASE evoting_db;
+# Creates the database for the voting system
+EXIT;
+# Exits MySQL command line
+
+### 5. Configure database credentials (if needed)
+# Edit src/main/resources/application.properties
+# Update spring.datasource.username and spring.datasource.password
+# Default: username=root, password=password
+
+### 6. Start Ganache (Ethereum local blockchain)
+# Open Ganache application and start a new workspace
+# Note the RPC server URL (usually http://127.0.0.1:7545)
+# Copy a private key from Ganache for blockchain transactions
+
+### 7. Build the Java application
+mvn clean install
+# Cleans previous builds and compiles the Spring Boot application
+# Downloads all Maven dependencies and runs tests
+
+### 8. Run the Spring Boot application
+mvn spring-boot:run
+# Starts the Spring Boot application on port 8080
+# Application will be available at http://localhost:8080
+
+### Alternative: Run with production profile
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+# Runs the application with production configuration
+
+### Alternative: Run the built JAR file
+java -jar target/blockchain-voting-system-1.0.0.jar
+# Runs the packaged JAR file directly
+
+## Testing Commands
+
+### Run unit tests
+mvn test
+# Executes all JUnit tests in the project
+
+### Run specific test class
+mvn test -Dtest=BlockchainVotingSystemApplicationTests
+# Runs only the specified test class
+
+### Generate test coverage report
+mvn test jacoco:report
+# Generates code coverage reports (if JaCoCo plugin configured)
+
+## Development Commands
+
+### Compile only (without tests)
+mvn compile
+# Compiles the Java source code without running tests
+
+### Package the application
+mvn package
+# Creates a JAR file in the target/ directory
+
+### Clean build artifacts
+mvn clean
+# Removes all build artifacts from target/ directory
+
+### Check for dependency updates
+mvn versions:display-dependency-updates
+# Shows available updates for project dependencies
+
+## Database Commands
+
+### View application logs with database queries
+mvn spring-boot:run | grep -i "hibernate\|sql"
+# Runs the application and filters logs to show database queries
+
+### Reset database (development only)
+# Drop and recreate the database, then run:
+mvn spring-boot:run
+# This will recreate tables due to spring.jpa.hibernate.ddl-auto=update
+
+## API Testing Commands
+
+### Test authentication endpoint
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"password"}'
+# Tests the login endpoint
+
+### Test getting active elections
+curl -X GET http://localhost:8080/api/elections/active \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+# Tests retrieving active elections (requires authentication)
+
+### Health check
+curl http://localhost:8080/actuator/health
+# Checks if the application is running (if actuator enabled)
+
+## Troubleshooting Commands
+
+### Check Java version
+java -version
+# Verifies Java installation and version
+
+### Check Maven version
+mvn -version
+# Verifies Maven installation and version
+
+### Check MySQL connection
+mysql -u root -p -e "SELECT 1;"
+# Tests MySQL connection
+
+### View application logs
+tail -f logs/application.log
+# Monitors application logs in real-time
+
+### Kill process on port 8080 (if needed)
+lsof -ti:8080 | xargs kill -9
+# Forcefully stops any process running on port 8080
+
+## Deployment Commands
+
+### Build for production
+mvn clean package -DskipTests
+# Creates production JAR without running tests
+
+### Run with specific profile
+java -jar target/blockchain-voting-system-1.0.0.jar --spring.profiles.active=prod
+# Runs the application with production configuration
+
+### Run in background
+nohup java -jar target/blockchain-voting-system-1.0.0.jar > app.log 2>&1 &
+# Runs the application in background and logs output
+
+## Environment Variables (Optional)
+
+### Set environment variables
+export SPRING_DATASOURCE_USERNAME=your_db_user
+export SPRING_DATASOURCE_PASSWORD=your_db_password
+export JWT_SECRET=your_jwt_secret_key
+# Sets environment variables for sensitive configuration
+
+## Quick Start (All-in-one command)
+mvn clean install && mvn spring-boot:run
+# Builds and runs the application in one command (after database setup)
