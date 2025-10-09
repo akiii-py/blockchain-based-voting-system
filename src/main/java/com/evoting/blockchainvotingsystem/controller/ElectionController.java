@@ -18,7 +18,7 @@ import com.evoting.blockchainvotingsystem.model.Election;
 import com.evoting.blockchainvotingsystem.service.ElectionService;
 
 @RestController
-@RequestMapping("/api/elections")
+@RequestMapping("/elections")
 public class ElectionController {
 
     private final ElectionService electionService;

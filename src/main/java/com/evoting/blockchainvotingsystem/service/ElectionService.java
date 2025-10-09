@@ -28,7 +28,13 @@ public class ElectionService {
     }
 
     public Candidate addCandidate(Long electionId, String name, String party, String description) {
-        Candidate candidate = new Candidate(name, party, description, electionId);
+        Optional<Election> electionOpt = electionRepository.findById(electionId);
+        if (electionOpt.isEmpty()) {
+            throw new RuntimeException("Election not found: " + electionId);
+        }
+
+        Election election = electionOpt.get();
+        Candidate candidate = new Candidate(name, party, description, election);
         return candidateRepository.save(candidate);
     }
 
@@ -41,7 +47,7 @@ public class ElectionService {
     }
 
     public List<Candidate> getCandidatesByElectionId(Long electionId) {
-        return candidateRepository.findByElectionId(electionId);
+        return candidateRepository.findByElection_Id(electionId);
     }
 
     public void activateElection(Long electionId) {

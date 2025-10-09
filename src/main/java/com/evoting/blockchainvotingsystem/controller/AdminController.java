@@ -20,7 +20,7 @@ import com.evoting.blockchainvotingsystem.service.ElectionService;
 import com.evoting.blockchainvotingsystem.service.UserService;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 

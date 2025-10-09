@@ -12,28 +12,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.evoting.blockchainvotingsystem.model.User;
 import com.evoting.blockchainvotingsystem.model.Vote;
+import com.evoting.blockchainvotingsystem.repository.UserRepository;
 import com.evoting.blockchainvotingsystem.service.VotingService;
 
 @RestController
-@RequestMapping("/api/voting")
+@RequestMapping("/voting")
 public class VotingController {
 
     private final VotingService votingService;
+    private final UserRepository userRepository;
 
-    public VotingController(VotingService votingService) {
+    public VotingController(VotingService votingService, UserRepository userRepository) {
         this.votingService = votingService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/vote")
     public ResponseEntity<Vote> castVote(@RequestParam Long candidateId,
                                         @RequestParam Long electionId,
                                         Authentication authentication) {
-        // Get user ID from authentication context
         String username = authentication.getName();
-        // In a real implementation, you'd get the user ID from the UserDetails
-        // For now, we'll assume the username is the user ID as string
-        Long userId = Long.parseLong(username); // This is a simplification
+        Long userId = userRepository.findByUsername(username)
+                .map(User::getId)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found: " + username));
 
         Vote vote = votingService.castVote(userId, candidateId, electionId);
         return ResponseEntity.ok(vote);

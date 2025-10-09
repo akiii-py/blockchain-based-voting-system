@@ -1,0 +1,185 @@
+{
+  "info": {
+    "name": "EVoting API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\",\n  \"email\": \"admin@evoting.com\",\n  \"fullName\": \"System Administrator\",\n  \"voterId\": \"ADMIN001\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Auth - Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json && json.token) { pm.environment.set('adminToken', json.token); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Admin - Create Election",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/elections", "host": ["{{baseUrl}}"], "path": ["admin", "elections"] },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {"key": "title", "value": "Presidential Election"},
+            {"key": "description", "value": "Choose the president"},
+            {"key": "startTime", "value": "2025-01-01T09:00:00"},
+            {"key": "endTime", "value": "2025-01-01T17:00:00"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Admin - Activate Election",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/elections/{{electionId}}/activate", "host": ["{{baseUrl}}"], "path": ["admin", "elections", "{{electionId}}", "activate"] }
+      }
+    },
+    {
+      "name": "Elections - Add Candidate",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+        ],
+        "url": { "raw": "{{baseUrl}}/elections/{{electionId}}/candidates", "host": ["{{baseUrl}}"], "path": ["elections", "{{electionId}}", "candidates"] },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {"key": "name", "value": "John Smith"},
+            {"key": "party", "value": "Democratic Party"},
+            {"key": "description", "value": "Experienced leader"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Auth - Register Voter",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"voter1\",\n  \"password\": \"voter123\",\n  \"email\": \"voter1@example.com\",\n  \"fullName\": \"John Doe\",\n  \"voterId\": \"VOTER001\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Auth - Login Voter",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json && json.token) { pm.environment.set('userToken', json.token); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"voter1\",\n  \"password\": \"voter123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Elections - Get Active",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/elections/active", "host": ["{{baseUrl}}"], "path": ["elections", "active"] }
+      }
+    },
+    {
+      "name": "Elections - Get Candidates",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/elections/{{electionId}}/candidates", "host": ["{{baseUrl}}"], "path": ["elections", "{{electionId}}", "candidates"] }
+      }
+    },
+    {
+      "name": "Voting - Cast Vote",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/voting/vote?electionId={{electionId}}&candidateId={{candidateId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["voting", "vote"],
+          "query": [
+            {"key": "electionId", "value": "{{electionId}}"},
+            {"key": "candidateId", "value": "{{candidateId}}"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Voting - Get Votes (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/voting/election/{{electionId}}/votes", "host": ["{{baseUrl}}"], "path": ["voting", "election", "{{electionId}}", "votes"] }
+      }
+    }
+  ]
+}

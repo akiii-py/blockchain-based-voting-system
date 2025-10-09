@@ -4,11 +4,15 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "candidates")
@@ -27,8 +31,10 @@ public class Candidate {
     @Column(length = 1000)
     private String description;
 
-    @Column(name = "election_id", nullable = false)
-    private Long electionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "election_id", nullable = false)
+    @JsonIgnore
+    private Election election;
 
     @Column(name = "vote_count")
     private Long voteCount = 0L;
@@ -42,11 +48,11 @@ public class Candidate {
     public Candidate() {
     }
 
-    public Candidate(String name, String party, String description, Long electionId) {
+    public Candidate(String name, String party, String description, Election election) {
         this.name = name;
         this.party = party;
         this.description = description;
-        this.electionId = electionId;
+        this.election = election;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -89,12 +95,23 @@ public class Candidate {
         this.description = description;
     }
 
+    public Election getElection() {
+        return election;
+    }
+
+    public void setElection(Election election) {
+        this.election = election;
+    }
+
     public Long getElectionId() {
-        return electionId;
+        return election != null ? election.getId() : null;
     }
 
     public void setElectionId(Long electionId) {
-        this.electionId = electionId;
+        if (this.election == null) {
+            this.election = new Election();
+        }
+        this.election.setId(electionId);
     }
 
     public Long getVoteCount() {

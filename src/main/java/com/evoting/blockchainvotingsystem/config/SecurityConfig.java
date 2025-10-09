@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
+                // matchers are evaluated against paths WITHOUT context-path, so use "/auth/**"
+                .requestMatchers("/auth/**", "/public/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

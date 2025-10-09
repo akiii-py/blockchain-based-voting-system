@@ -7,8 +7,8 @@
 # Install Maven 3.6+ (if not already installed)
 # Download from: https://maven.apache.org/download.cgi
 
-# Install MySQL 8.0+ (if not already installed)
-# Download from: https://dev.mysql.com/downloads/mysql/
+# Install PostgreSQL 14+ (if not already installed)
+# Download from: https://www.postgresql.org/download/
 
 # Install Ganache (Ethereum local blockchain) for development
 # Download from: https://trufflesuite.com/ganache/
@@ -27,18 +27,22 @@ source venv/bin/activate
 pip install -r requirements.txt
 # Installs all Python packages listed in requirements.txt for development tools
 
-### 4. Create MySQL database
-mysql -u root -p
-# Logs into MySQL command line
+### 4. Create PostgreSQL database
+createdb evoting_db
+# Creates the database for the voting system (using default postgres user)
+
+# Alternative: Using psql command line
+psql -U postgres
+# Logs into PostgreSQL command line
 CREATE DATABASE evoting_db;
 # Creates the database for the voting system
-EXIT;
-# Exits MySQL command line
+\q
+# Exits PostgreSQL command line
 
 ### 5. Configure database credentials (if needed)
 # Edit src/main/resources/application.properties
 # Update spring.datasource.username and spring.datasource.password
-# Default: username=root, password=password
+# Default: username=postgres, password=password
 
 ### 6. Start Ganache (Ethereum local blockchain)
 # Open Ganache application and start a new workspace
@@ -133,9 +137,9 @@ java -version
 mvn -version
 # Verifies Maven installation and version
 
-### Check MySQL connection
-mysql -u root -p -e "SELECT 1;"
-# Tests MySQL connection
+### Check PostgreSQL connection
+psql -U postgres -d evoting_db -c "SELECT 1;"
+# Tests PostgreSQL connection
 
 ### View application logs
 tail -f logs/application.log

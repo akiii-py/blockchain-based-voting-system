@@ -10,6 +10,6 @@ import com.evoting.blockchainvotingsystem.model.Candidate;
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
-    List<Candidate> findByElectionId(Long electionId);
+    List<Candidate> findByElection_Id(Long electionId);
 
 }
