@@ -242,11 +242,12 @@ curl -X GET http://localhost:8080/api/elections/1/candidates \
 
 ### **Step 10: Cast Vote**
 
-User casts their vote for candidate ID 1 (John Smith):
+User casts their vote for candidate ID 1 (John Smith). Note: No authentication required for voting.
+
+**Important:** If you get 401 Unauthorized, restart the Spring Boot application for security configuration changes to take effect.
 
 ```bash
-curl -X POST "http://localhost:8080/api/voting/vote?electionId=1&candidateId=1" \
-  -H "Authorization: Bearer $USER_TOKEN"
+curl -X POST "http://localhost:8080/api/voting/vote?userId=2&electionId=1&candidateId=1"
 ```
 
 **Expected Response:**
@@ -257,7 +258,9 @@ curl -X POST "http://localhost:8080/api/voting/vote?electionId=1&candidateId=1" 
   "candidateId": 1,
   "electionId": 1,
   "transactionHash": "0x1234567890abcdef...",
-  "timestamp": "2024-01-15T10:30:00"
+  "blockNumber": null,
+  "votedAt": "2024-01-15T10:30:00",
+  "isVerified": false
 }
 ```
 
@@ -312,7 +315,7 @@ curl -X GET "http://localhost:8080/api/voting/user/2/election/1/status" \
 - `POST /api/elections/{electionId}/candidates` - Add candidate to election (Admin)
 
 ### **Voting Operations:**
-- `POST /api/voting/vote` - Cast vote
+- `POST /api/voting/vote?userId={userId}&electionId={electionId}&candidateId={candidateId}` - Cast vote (No authentication required)
 - `GET /api/voting/election/{electionId}/votes` - Get votes for election
 - `GET /api/voting/user/{userId}/election/{electionId}/status` - Check if user voted
 

@@ -157,14 +157,13 @@
       "name": "Voting - Cast Vote",
       "request": {
         "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{userToken}}" }
-        ],
+        "header": [],
         "url": {
-          "raw": "{{baseUrl}}/voting/vote?electionId={{electionId}}&candidateId={{candidateId}}",
+          "raw": "{{baseUrl}}/voting/vote?userId={{userId}}&electionId={{electionId}}&candidateId={{candidateId}}",
           "host": ["{{baseUrl}}"],
           "path": ["voting", "vote"],
           "query": [
+            {"key": "userId", "value": "{{userId}}"},
             {"key": "electionId", "value": "{{electionId}}"},
             {"key": "candidateId", "value": "{{candidateId}}"}
           ]

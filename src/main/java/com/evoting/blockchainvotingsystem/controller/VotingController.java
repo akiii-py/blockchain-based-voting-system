@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.evoting.blockchainvotingsystem.model.User;
 import com.evoting.blockchainvotingsystem.model.Vote;
 import com.evoting.blockchainvotingsystem.repository.UserRepository;
 import com.evoting.blockchainvotingsystem.service.VotingService;
@@ -30,14 +28,9 @@ public class VotingController {
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<Vote> castVote(@RequestParam Long candidateId,
-                                        @RequestParam Long electionId,
-                                        Authentication authentication) {
-        String username = authentication.getName();
-        Long userId = userRepository.findByUsername(username)
-                .map(User::getId)
-                .orElseThrow(() -> new RuntimeException("Authenticated user not found: " + username));
-
+    public ResponseEntity<Vote> castVote(@RequestParam Long userId,
+                                        @RequestParam Long candidateId,
+                                        @RequestParam Long electionId) {
         Vote vote = votingService.castVote(userId, candidateId, electionId);
         return ResponseEntity.ok(vote);
     }
