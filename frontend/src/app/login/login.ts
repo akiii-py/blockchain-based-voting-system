@@ -28,6 +28,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
+  loading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -36,6 +37,9 @@ export class LoginComponent {
    * Authenticates user credentials and manages session
    */
   onLogin() {
+    this.loading = true;
+    this.errorMessage = '';
+
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (response: any) => {
         // Store authentication token and user role
@@ -48,6 +52,7 @@ export class LoginComponent {
       error: (error: any) => {
         // Display error message for invalid credentials
         this.errorMessage = 'Invalid credentials';
+        this.loading = false;
       }
     });
   }

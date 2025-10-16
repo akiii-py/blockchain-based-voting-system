@@ -1,16 +1,52 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="onLogin()">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" [(ngModel)]="username" name="username" required>
+<div class="container">
+  <div class="card">
+    <div class="login-container">
+      <h2>🔐 Secure Login</h2>
+      <p class="text-muted">Access your blockchain voting account</p>
+
+      <form (ngSubmit)="onLogin()" class="login-form">
+        <div class="form-group">
+          <label for="username">👤 Username</label>
+          <input
+            type="text"
+            id="username"
+            [(ngModel)]="username"
+            name="username"
+            class="form-control"
+            placeholder="Enter your username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">🔒 Password</label>
+          <input
+            type="password"
+            id="password"
+            [(ngModel)]="password"
+            name="password"
+            class="form-control"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!username || !password">
+          <span *ngIf="!loading">🚀 Login</span>
+          <span *ngIf="loading" class="spinner"></span>
+          <span *ngIf="loading"> Logging in...</span>
+        </button>
+      </form>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+
+      <div class="text-center mt-3">
+        <p class="mb-0">Don't have an account?
+          <a routerLink="/register" class="text-primary">📝 Register here</a>
+        </p>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" [(ngModel)]="password" name="password" required>
-    </div>
-    <button type="submit">Login</button>
-  </form>
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  <p>Don't have an account? <a routerLink="/register">Register</a></p>
+  </div>
 </div>

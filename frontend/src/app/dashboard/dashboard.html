@@ -1,23 +1,136 @@
 <div class="dashboard-container">
-  <header>
-    <h1>Blockchain Voting System Dashboard</h1>
-    <button (click)="logout()">Logout</button>
-  </header>
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        🗳️ Blockchain Voting System
+      </a>
+      <div class="nav-links">
+        <a routerLink="/dashboard" routerLinkActive="active">🏠 Dashboard</a>
+        <a *ngIf="userRole === 'ADMIN'" routerLink="/admin" routerLinkActive="active">⚙️ Admin Panel</a>
+        <button (click)="logout()" class="btn btn-secondary">🚪 Logout</button>
+      </div>
+    </div>
+  </nav>
 
-  <div class="content">
-    <h2>Active Elections</h2>
-    <div class="elections-list">
-      <div *ngFor="let election of elections" class="election-card">
-        <h3>{{ election.title }}</h3>
-        <p>{{ election.description }}</p>
-        <p>Start: {{ election.startTime | date:'medium' }}</p>
-        <p>End: {{ election.endTime | date:'medium' }}</p>
-        <button (click)="goToVote(election.id)">Vote</button>
+  <div class="container">
+    <!-- Welcome Section -->
+    <div class="card welcome-card">
+      <h1>👋 Welcome back, {{ user?.fullName || 'Voter' }}!</h1>
+      <p class="text-muted">Your secure blockchain voting dashboard</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🗳️</div>
+          <div class="stat-content">
+            <h3>{{ elections?.length || 0 }}</h3>
+            <p>Active Elections</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <h3>{{ userVotesCount || 0 }}</h3>
+            <p>Votes Cast</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔒</div>
+          <div class="stat-content">
+            <h3>100%</h3>
+            <p>Blockchain Secured</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div *ngIf="userRole === 'ADMIN'" class="admin-section">
-      <button (click)="goToAdmin()">Go to Admin Panel</button>
+    <!-- Active Elections Section -->
+    <div class="card">
+      <div class="section-header">
+        <h2>📊 Active Elections</h2>
+        <p>Participate in ongoing elections securely</p>
+      </div>
+
+      <div class="elections-grid" *ngIf="elections && elections.length > 0; else noElections">
+        <div *ngFor="let election of elections" class="election-card">
+          <div class="election-header">
+            <h3>{{ election.title }}</h3>
+            <span class="election-status status-active">🟢 Active</span>
+          </div>
+          <p class="election-description">{{ election.description }}</p>
+          <div class="election-details">
+            <div class="detail-item">
+              <span class="icon">📅</span>
+              <span>Start: {{ election.startTime | date:'short' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="icon">⏰</span>
+              <span>End: {{ election.endTime | date:'short' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="icon">👥</span>
+              <span>{{ election.candidates?.length || 0 }} Candidates</span>
+            </div>
+          </div>
+          <button (click)="goToVote(election.id)" class="btn btn-primary">
+            🗳️ Vote Now
+          </button>
+        </div>
+      </div>
+
+      <ng-template #noElections>
+        <div class="no-data">
+          <div class="no-data-icon">📭</div>
+          <h3>No Active Elections</h3>
+          <p>There are currently no active elections. Check back later!</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="card">
+      <div class="section-header">
+        <h2>📈 Recent Activity</h2>
+        <p>Your voting history and recent actions</p>
+      </div>
+
+      <div class="activity-list" *ngIf="recentVotes && recentVotes.length > 0; else noActivity">
+        <div *ngFor="let vote of recentVotes" class="activity-item">
+          <div class="activity-icon">✅</div>
+          <div class="activity-content">
+            <h4>Voted in {{ vote.electionTitle }}</h4>
+            <p>{{ vote.timestamp | date:'medium' }}</p>
+            <span class="activity-status">Vote Recorded on Blockchain</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noActivity>
+        <div class="no-data">
+          <div class="no-data-icon">📊</div>
+          <h3>No Recent Activity</h3>
+          <p>You haven't voted in any elections yet. Start participating!</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Admin Section (only for admins) -->
+    <div *ngIf="userRole === 'ADMIN'" class="card admin-card">
+      <div class="section-header">
+        <h2>⚙️ Administrator Controls</h2>
+        <p>Manage elections and system settings</p>
+      </div>
+
+      <div class="admin-actions">
+        <button routerLink="/admin" class="btn btn-primary">
+          🎛️ Go to Admin Panel
+        </button>
+        <button (click)="createElection()" class="btn btn-success">
+          ➕ Create New Election
+        </button>
+        <button (click)="viewReports()" class="btn btn-secondary">
+          📊 View Reports
+        </button>
+      </div>
     </div>
   </div>
 </div>
