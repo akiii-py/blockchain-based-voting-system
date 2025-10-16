@@ -1,0 +1,23 @@
+<div class="dashboard-container">
+  <header>
+    <h1>Blockchain Voting System Dashboard</h1>
+    <button (click)="logout()">Logout</button>
+  </header>
+
+  <div class="content">
+    <h2>Active Elections</h2>
+    <div class="elections-list">
+      <div *ngFor="let election of elections" class="election-card">
+        <h3>{{ election.title }}</h3>
+        <p>{{ election.description }}</p>
+        <p>Start: {{ election.startTime | date:'medium' }}</p>
+        <p>End: {{ election.endTime | date:'medium' }}</p>
+        <button (click)="goToVote(election.id)">Vote</button>
+      </div>
+    </div>
+
+    <div *ngIf="userRole === 'ADMIN'" class="admin-section">
+      <button (click)="goToAdmin()">Go to Admin Panel</button>
+    </div>
+  </div>
+</div>

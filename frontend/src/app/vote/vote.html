@@ -1,0 +1,23 @@
+<div class="vote-container">
+  <h2>Cast Your Vote</h2>
+
+  <div *ngIf="!hasVoted" class="candidates-list">
+    <div *ngFor="let candidate of candidates" class="candidate-card">
+      <input type="radio" [value]="candidate.id" [(ngModel)]="selectedCandidateId" name="candidate">
+      <label>
+        <h3>{{ candidate.name }}</h3>
+        <p>Party: {{ candidate.party }}</p>
+        <p>{{ candidate.description }}</p>
+      </label>
+    </div>
+    <button (click)="castVote()" [disabled]="!selectedCandidateId">Cast Vote</button>
+  </div>
+
+  <div *ngIf="hasVoted" class="voted-message">
+    <p>You have already voted in this election.</p>
+  </div>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <button (click)="goBack()">Back to Dashboard</button>
+</div>
