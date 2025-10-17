@@ -34,6 +34,17 @@ A secure, transparent, and tamper-proof electronic voting system built using blo
 - **Web3j** - Ethereum blockchain integration
 - **Maven** - Build tool
 
+### Frontend
+- **Angular 17** - Modern web framework for building scalable SPAs
+- **TypeScript** - Strongly typed programming language
+- **RxJS** - Reactive programming library for handling asynchronous operations
+- **Angular Router** - Client-side routing for navigation
+- **Angular Forms** - Template-driven and reactive forms for user input
+- **Angular HTTP Client** - For making API calls to the backend
+- **Angular Guards** - Route protection based on authentication and roles
+- **Angular Interceptors** - Automatic JWT token attachment to HTTP requests
+- **Angular CLI** - Command-line interface for Angular development
+
 ### Security
 - **Bouncy Castle** - Cryptographic operations
 - **BCrypt** - Password hashing
@@ -43,6 +54,7 @@ A secure, transparent, and tamper-proof electronic voting system built using blo
 - **JUnit** - Unit testing
 - **Mockito** - Mocking framework
 - **JaCoCo** - Code coverage
+- **Angular DevKit** - Build tools and schematics for Angular
 
 ## 📋 Prerequisites
 
@@ -79,18 +91,32 @@ CREATE DATABASE evoting_db;
 \q
 ```
 
-### 2. Build and Run
+### 2. Build and Run Backend
 ```bash
-# Build the application
+# Build the backend application
 mvn clean install
 
-# Run the application
+# Run the backend application
 mvn spring-boot:run
 ```
 
-The application will start on `http://localhost:8080`
+The backend will start on `http://localhost:8080`
 
-### 3. Test the System
+### 3. Setup and Run Frontend
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install Angular dependencies
+npm install
+
+# Run the frontend development server
+ng serve
+```
+
+The frontend will start on `http://localhost:4200`
+
+### 4. Test the System
 Follow the comprehensive testing guide in [`TESTING_GUIDE.md`](TESTING_GUIDE.md)
 
 ## 📚 API Documentation
@@ -132,7 +158,47 @@ See [`TESTING_GUIDE.md`](TESTING_GUIDE.md) for complete end-to-end testing instr
 
 ```
 blockchain-voting-system/
-├── src/
+├── frontend/                       # Angular frontend application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── admin/              # Admin panel components
+│   │   │   │   ├── admin.ts         # Admin component logic
+│   │   │   │   ├── admin.html       # Admin template
+│   │   │   │   └── admin.css        # Admin styles
+│   │   │   ├── dashboard/          # User dashboard components
+│   │   │   │   ├── dashboard.ts     # Dashboard component logic
+│   │   │   │   ├── dashboard.html   # Dashboard template
+│   │   │   │   └── dashboard.css    # Dashboard styles
+│   │   │   ├── login/              # Login components
+│   │   │   │   ├── login.ts         # Login component logic
+│   │   │   │   ├── login.html       # Login template
+│   │   │   │   └── login.css        # Login styles
+│   │   │   ├── register/           # Registration components
+│   │   │   │   ├── register.ts      # Register component logic
+│   │   │   │   ├── register.html    # Register template
+│   │   │   │   └── register.css     # Register styles
+│   │   │   ├── vote/               # Voting components
+│   │   │   │   ├── vote.ts          # Vote component logic
+│   │   │   │   ├── vote.html        # Vote template
+│   │   │   │   └── vote.css         # Vote styles
+│   │   │   ├── admin.ts             # Admin service for API calls
+│   │   │   ├── auth.ts              # Authentication service
+│   │   │   ├── election.ts          # Election service
+│   │   │   ├── voting.ts            # Voting service
+│   │   │   ├── auth-guard.ts        # Route guard for authentication
+│   │   │   ├── admin-guard.ts       # Route guard for admin access
+│   │   │   ├── jwt-interceptor.ts   # HTTP interceptor for JWT tokens
+│   │   │   ├── app.config.ts        # Application configuration
+│   │   │   ├── app.routes.ts        # Route definitions
+│   │   │   ├── app.ts               # Main application component
+│   │   │   └── app.html             # Main application template
+│   │   ├── index.html               # Main HTML file
+│   │   ├── main.ts                  # Application bootstrap
+│   │   └── styles.css               # Global styles
+│   ├── angular.json                 # Angular CLI configuration
+│   ├── package.json                 # Node.js dependencies
+│   └── tsconfig.json                # TypeScript configuration
+├── src/                            # Spring Boot backend
 │   ├── main/
 │   │   ├── java/com/evoting/blockchainvotingsystem/
 │   │   │   ├── controller/          # REST controllers
@@ -145,11 +211,12 @@ blockchain-voting-system/
 │   │   │   └── BlockchainVotingSystemApplication.java
 │   │   └── resources/
 │   │       ├── application.properties
-│   │       └── static/             # Static resources
+│       └── static/             # Static resources
 │   └── test/                       # Test classes
 ├── pom.xml                         # Maven configuration
 ├── TESTING_GUIDE.md               # Complete testing guide
 ├── commands.txt                   # Setup and run commands
+├── project-flow.txt               # Detailed project flow explanation
 └── README.md                      # This file
 ```
 

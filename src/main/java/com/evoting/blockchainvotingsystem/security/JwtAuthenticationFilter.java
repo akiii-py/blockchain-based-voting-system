@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // Skip JWT processing for permitAll endpoints
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/api/voting/vote")) {
+        if (requestURI.equals("/api/voting/vote") || requestURI.equals("/voting/vote")) {
             filterChain.doFilter(request, response);
             return;
         }

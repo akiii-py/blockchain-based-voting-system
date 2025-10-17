@@ -1,0 +1,57 @@
+# Blockchain-Based E-Voting System - API Endpoints for Browser Access
+# Base URL: http://localhost:8080/api
+# Note: Some endpoints require authentication (JWT token in Authorization header)
+
+## Authentication Endpoints
+# POST http://localhost:8080/api/auth/register - Register new user
+# POST http://localhost:8080/api/auth/login - Login user
+
+## Election Management (GET endpoints - browser accessible)
+GET http://localhost:8080/api/elections/active - Get active elections
+GET http://localhost:8080/api/elections/{id}/candidates - Get candidates for election (replace {id} with election ID)
+GET http://localhost:8080/api/elections/{id} - Get election details (replace {id} with election ID)
+
+## Voting Operations (GET endpoints - browser accessible with auth)
+GET http://localhost:8080/api/voting/election/{electionId}/votes - Get votes for election (replace {electionId})
+GET http://localhost:8080/api/voting/user/{userId}/election/{electionId}/status - Check if user voted (replace {userId} and {electionId})
+
+## Admin Endpoints (require admin role)
+# POST http://localhost:8080/api/admin/elections - Create election
+# PUT http://localhost:8080/api/admin/elections/{id}/activate - Activate election
+# PUT http://localhost:8080/api/admin/elections/{id}/deactivate - Deactivate election
+# POST http://localhost:8080/api/elections/{electionId}/candidates - Add candidate to election
+
+## Voting Operations (POST endpoints)
+# POST http://localhost:8080/api/voting/vote - Cast vote
+
+## Health Check
+GET http://localhost:8080/actuator/health - Application health check
+
+## Example Browser URLs (replace placeholders):
+# Active Elections: http://localhost:8080/api/elections/active
+# Election Candidates: http://localhost:8080/api/elections/1/candidates
+# Election Votes: http://localhost:8080/api/voting/election/1/votes (requires auth)
+# User Vote Status: http://localhost:8080/api/voting/user/1/election/1/status (requires auth)
+
+## Authentication Notes:
+# For protected endpoints, include JWT token in Authorization header:
+# Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+## Common Headers for POST requests:
+# Content-Type: application/json
+# Authorization: Bearer YOUR_JWT_TOKEN_HERE (for protected endpoints)
+
+## Sample Login Request Body (POST /api/auth/login):
+# {
+#   "username": "admin",
+#   "password": "password"
+# }
+
+## Sample Register Request Body (POST /api/auth/register):
+# {
+#   "username": "voter1",
+#   "password": "password123",
+#   "email": "voter1@example.com",
+#   "fullName": "John Doe",
+#   "voterId": "VOTER001"
+# }

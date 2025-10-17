@@ -1,15 +1,108 @@
 # Blockchain-Based E-Voting System - Project Flow & File Explanation
 
 ## 🎯 PROJECT OVERVIEW
-This is a secure electronic voting system that uses blockchain technology to ensure votes are tamper-proof and transparent. It prevents fraud, double-voting, and allows voters to verify their votes were recorded correctly.
+This is a full-stack secure electronic voting system that uses blockchain technology to ensure votes are tamper-proof and transparent. It prevents fraud, double-voting, and allows voters to verify their votes were recorded correctly. The system consists of a Spring Boot backend API and an Angular frontend for a complete user experience.
 
 ## 🏗️ PROJECT STRUCTURE & FLOW
 
-### 1. MAIN APPLICATION ENTRY POINT
+### FRONTEND COMPONENTS (Angular)
+
+#### Core Application Files
+**File: frontend/src/main.ts**
+- **Why made**: Entry point for the Angular application
+- **What it does**: Bootstraps the Angular app with necessary providers
+- **Simple explanation**: Starts the Angular application and connects it to the browser
+
+**File: frontend/src/app/app.ts**
+- **Why made**: Root component of the Angular application
+- **What it does**: Main application component that hosts the router outlet
+- **Simple explanation**: The main container that holds all other components
+
+**File: frontend/src/app/app.html**
+- **Why made**: Template for the root component
+- **What it does**: Contains the router outlet for navigation
+- **Simple explanation**: The HTML structure that displays different pages
+
+**File: frontend/src/app/app.config.ts**
+- **Why made**: Application-wide configuration
+- **What it does**: Sets up HTTP client, routing, and other providers
+- **Simple explanation**: Configuration hub for the entire Angular app
+
+**File: frontend/src/app/app.routes.ts**
+- **Why made**: Defines navigation routes
+- **What it does**: Maps URLs to components with guards
+- **Simple explanation**: Road map telling Angular which component to show for each URL
+
+#### Authentication & Security
+**File: frontend/src/app/auth.ts**
+- **Why made**: Handle user authentication operations
+- **What it does**: Login, logout, token management, user state
+- **Simple explanation**: Authentication manager for the frontend
+
+**File: frontend/src/app/auth-guard.ts**
+- **Why made**: Protect routes that require authentication
+- **What it does**: Checks if user is logged in before allowing access
+- **Simple explanation**: Security guard at the door of protected pages
+
+**File: frontend/src/app/admin-guard.ts**
+- **Why made**: Protect admin-only routes
+- **What it does**: Ensures only admin users can access admin features
+- **Simple explanation**: Special guard for admin-only areas
+
+**File: frontend/src/app/jwt-interceptor.ts**
+- **Why made**: Automatically attach JWT tokens to API requests
+- **What it does**: Adds authorization headers to HTTP requests
+- **Simple explanation**: Automatic token attacher for API calls
+
+#### Services (API Communication)
+**File: frontend/src/app/admin.ts**
+- **Why made**: Handle admin-related API operations
+- **What it does**: User management, election creation, system administration
+- **Simple explanation**: Admin API service for backend communication
+
+**File: frontend/src/app/election.ts**
+- **Why made**: Manage election data and operations
+- **What it does**: Fetch elections, candidates, election status
+- **Simple explanation**: Election data manager
+
+**File: frontend/src/app/voting.ts**
+- **Why made**: Handle voting operations
+- **What it does**: Cast votes, check voting status, retrieve vote history
+- **Simple explanation**: Voting operations service
+
+#### UI Components
+**File: frontend/src/app/login/**
+- **login.ts**: Login component logic - handles user authentication form
+- **login.html**: Login form template - username/password inputs and submit button
+- **login.css**: Login page styling - makes the login form look good
+
+**File: frontend/src/app/register/**
+- **register.ts**: Registration component logic - handles new user signup
+- **register.html**: Registration form template - user details form
+- **register.css**: Registration page styling - form appearance
+
+**File: frontend/src/app/dashboard/**
+- **dashboard.ts**: Dashboard component logic - displays elections and user info
+- **dashboard.html**: Dashboard template - shows available elections and navigation
+- **dashboard.css**: Dashboard styling - layout and visual design
+
+**File: frontend/src/app/vote/**
+- **vote.ts**: Voting component logic - handles candidate selection and vote submission
+- **vote.html**: Voting interface template - candidate list with radio buttons
+- **vote.css**: Voting page styling - ballot appearance
+
+**File: frontend/src/app/admin/**
+- **admin.ts**: Admin panel component logic - manages users and elections
+- **admin.html**: Admin interface template - user management and election controls
+- **admin.css**: Admin panel styling - administrative interface design
+
+### BACKEND COMPONENTS (Spring Boot)
+
+#### 1. MAIN APPLICATION ENTRY POINT
 **File: BlockchainVotingSystemApplication.java**
-- **Why made**: This is the starting point of our entire application
+- **Why made**: This is the starting point of our entire backend application
 - **What it does**: Launches the Spring Boot application and enables all the features
-- **Simple explanation**: Like the "on" button for our voting system - without this, nothing runs
+- **Simple explanation**: Like the "on" button for our voting system backend - without this, nothing runs
 
 ### 2. CONFIGURATION FILES
 
@@ -167,37 +260,77 @@ This is a secure electronic voting system that uses blockchain technology to ens
 - **What it does**: Tells Git which files to ignore (passwords, build files, etc.)
 - **Simple explanation**: Filter that keeps secret and temporary files out of the repository
 
-## 🔄 HOW THE SYSTEM WORKS (Flow)
+## 🔄 HOW THE FULL-STACK SYSTEM WORKS (Complete Flow)
 
-### User Registration Flow:
-1. User fills registration form → RegisterRequest.java
-2. Request goes to AdminController.java
-3. Controller calls UserService.java
-4. Service validates data and calls UserRepository.java
-5. Repository saves to database (User.java model)
-6. Password gets encrypted by SecurityConfig.java
+### Frontend-Backend Integration Overview:
+1. **Angular Frontend** runs on `http://localhost:4200` - provides user interface
+2. **Spring Boot Backend** runs on `http://localhost:8080` - provides API endpoints
+3. Frontend makes HTTP requests to backend APIs for data and operations
+4. JWT tokens handle authentication between frontend and backend
 
-### Authentication Flow:
-1. User logs in → LoginRequest.java
-2. Request goes to (authentication endpoint in SecurityConfig.java)
-3. CustomUserDetailsService.java loads user from database
-4. JwtTokenProvider.java creates secure token
-5. Token sent back to user for future requests
+### Complete User Journey:
 
-### Voting Flow:
-1. User requests election info → ElectionController.java
-2. Controller gets data from ElectionService.java
-3. Service retrieves from ElectionRepository.java and CandidateRepository.java
-4. User sees candidates and votes → VotingController.java
-5. Controller validates with VotingService.java
-6. Service checks for double-voting and saves to VoteRepository.java
-7. Vote gets recorded on blockchain (future integration)
+#### User Registration Flow:
+1. **Frontend**: User fills registration form in `register.html` → `register.ts` handles form submission
+2. **Frontend**: `register.ts` calls `auth.ts` service → makes HTTP POST to `/api/auth/register`
+3. **Backend**: Request reaches `AuthController.java` → validates RegisterRequest.java
+4. **Backend**: Controller calls `UserService.java` → validates business rules
+5. **Backend**: Service calls `UserRepository.java` → saves to database (User.java model)
+6. **Backend**: Password encrypted by `SecurityConfig.java` using BCrypt
+7. **Frontend**: User redirected to login page on successful registration
 
-### Security Flow:
-1. Every request passes through JwtAuthenticationFilter.java
-2. Filter validates JWT token with JwtTokenProvider.java
-3. If invalid, JwtAuthenticationEntryPoint.java returns error
-4. Valid requests proceed to controllers with user information
+#### Authentication Flow:
+1. **Frontend**: User enters credentials in `login.html` → `login.ts` handles form
+2. **Frontend**: `login.ts` calls `auth.ts` → HTTP POST to `/api/auth/login`
+3. **Backend**: Request to `AuthController.java` → validates LoginRequest.java
+4. **Backend**: `CustomUserDetailsService.java` loads user from database
+5. **Backend**: `JwtTokenProvider.java` creates JWT token with user claims
+6. **Frontend**: Token stored in localStorage, user redirected to dashboard
+7. **Frontend**: `jwt-interceptor.ts` automatically adds token to future API calls
+
+#### Election Viewing Flow:
+1. **Frontend**: User navigates to dashboard → `dashboard.ts` loads on component init
+2. **Frontend**: `dashboard.ts` calls `election.ts` service → GET `/api/elections/active`
+3. **Backend**: `ElectionController.java` receives request → calls `ElectionService.java`
+4. **Backend**: Service queries `ElectionRepository.java` → returns active elections
+5. **Frontend**: Elections displayed in `dashboard.html` with voting buttons
+
+#### Voting Flow:
+1. **Frontend**: User clicks "Vote" → navigates to `/vote/:electionId` route
+2. **Frontend**: `vote.ts` loads → calls `election.ts` for candidates → GET `/api/elections/{id}/candidates`
+3. **Backend**: `ElectionController.java` → `ElectionService.java` → `CandidateRepository.java`
+4. **Frontend**: User selects candidate in `vote.html` → submits vote
+5. **Frontend**: `vote.ts` calls `voting.ts` service → POST `/api/voting/vote`
+6. **Backend**: `VotingController.java` validates request → calls `VotingService.java`
+7. **Backend**: Service checks for double-voting using `VoteRepository.java`
+8. **Backend**: Vote saved to database → blockchain recording (future feature)
+9. **Frontend**: Success message shown, user redirected to dashboard
+
+#### Admin Management Flow:
+1. **Frontend**: Admin logs in → `admin-guard.ts` allows access to `/admin` route
+2. **Frontend**: `admin.ts` component loads → calls services for users and elections
+3. **Frontend**: Admin can create users via `admin.ts` service → POST `/api/admin/users`
+4. **Backend**: `AdminController.java` → `UserService.java` → `UserRepository.java`
+5. **Frontend**: Admin creates elections → POST `/api/admin/elections`
+6. **Backend**: `ElectionService.java` saves election and candidates
+7. **Frontend**: Admin toggles election status → PUT `/api/admin/elections/{id}/activate`
+
+### Security Flow (End-to-End):
+1. **Frontend**: All API calls pass through `jwt-interceptor.ts` → adds Authorization header
+2. **Backend**: Every request filtered by `JwtAuthenticationFilter.java`
+3. **Backend**: Filter validates JWT using `JwtTokenProvider.java`
+4. **Backend**: Invalid tokens rejected by `JwtAuthenticationEntryPoint.java`
+5. **Backend**: Valid requests proceed with user context from `SecurityContext`
+6. **Backend**: Controllers check roles using `@PreAuthorize` annotations
+7. **Frontend**: Route guards (`auth-guard.ts`, `admin-guard.ts`) protect client-side routes
+
+### Data Flow Architecture:
+- **Frontend Services** (`auth.ts`, `election.ts`, `voting.ts`, `admin.ts`) → HTTP calls to backend
+- **Backend Controllers** → Receive requests, delegate to services
+- **Backend Services** → Business logic, validation, call repositories
+- **Backend Repositories** → Database operations using JPA/Hibernate
+- **Database** → PostgreSQL stores all application data
+- **Security Layer** → JWT tokens, BCrypt passwords, role-based access control
 
 ## 🎯 WHY BLOCKCHAIN?
 
@@ -209,11 +342,45 @@ The blockchain integration (planned for future) will:
 
 ## 🚀 DEPLOYMENT FLOW
 
-1. **Development**: Use commands.txt to set up local environment
-2. **Build**: Maven compiles everything using pom.xml
-3. **Database**: MySQL creates tables from entity models
-4. **Security**: JWT and encryption protect all endpoints
-5. **Blockchain**: Web3j connects to Ethereum network (future)
-6. **Production**: Application runs on configured port with all security enabled
+### Development Environment Setup:
+1. **Backend Setup**: Use `commands.txt` to configure PostgreSQL database and run Spring Boot
+2. **Frontend Setup**: Navigate to `frontend/` directory, run `npm install`, then `ng serve`
+3. **Database**: PostgreSQL creates tables automatically from JPA entity models
+4. **Ports**: Backend on `http://localhost:8080`, Frontend on `http://localhost:4200`
 
-This project follows clean architecture principles with clear separation of concerns, making it maintainable, secure, and scalable for real-world electronic voting systems.
+### Production Deployment:
+1. **Backend Build**: `mvn clean package -DskipTests` creates JAR file
+2. **Frontend Build**: `ng build --configuration production` creates optimized dist/
+3. **Database**: Configure production PostgreSQL instance with environment variables
+4. **Security**: Set JWT_SECRET and database credentials as environment variables
+5. **Deployment**: Deploy JAR to server, serve Angular dist/ files via web server
+6. **Reverse Proxy**: Nginx/Apache to route `/api/*` to backend and `/*` to frontend
+
+### Docker Deployment (Recommended):
+```dockerfile
+# Backend Dockerfile
+FROM openjdk:17-jdk-alpine
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+# Frontend Dockerfile
+FROM nginx:alpine
+COPY dist/frontend /usr/share/nginx/html
+EXPOSE 80
+```
+
+### Environment Variables:
+```bash
+# Backend
+SPRING_DATASOURCE_URL=jdbc:postgresql://prod-db:5432/evoting_db
+SPRING_DATASOURCE_USERNAME=prod_user
+SPRING_DATASOURCE_PASSWORD=secure_password
+JWT_SECRET=your_production_jwt_secret
+SPRING_PROFILES_ACTIVE=prod
+
+# Frontend (build time)
+API_BASE_URL=https://your-api-domain.com/api
+```
+
+This full-stack project follows clean architecture principles with clear separation of concerns between frontend and backend, making it maintainable, secure, and scalable for real-world electronic voting systems. The Angular frontend provides a modern, responsive user interface while the Spring Boot backend ensures robust API functionality and data security.
