@@ -116,7 +116,13 @@ ng serve
 
 The frontend will start on `http://localhost:4200`
 
-### 4. Test the System
+### 4. Alternative: Run Frontend with Proxy Configuration
+```bash
+# Run with proxy to backend (recommended for development)
+ng serve --proxy-config proxy.conf.json
+```
+
+### 5. Test the System
 Follow the comprehensive testing guide in [`TESTING_GUIDE.md`](TESTING_GUIDE.md)
 
 ## 📚 API Documentation
@@ -197,6 +203,7 @@ blockchain-voting-system/
 │   │   └── styles.css               # Global styles
 │   ├── angular.json                 # Angular CLI configuration
 │   ├── package.json                 # Node.js dependencies
+│   ├── proxy.conf.json              # Proxy configuration for backend API
 │   └── tsconfig.json                # TypeScript configuration
 ├── src/                            # Spring Boot backend
 │   ├── main/

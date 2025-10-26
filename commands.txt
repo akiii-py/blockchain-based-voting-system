@@ -171,6 +171,84 @@ export SPRING_DATASOURCE_PASSWORD=your_db_password
 export JWT_SECRET=your_jwt_secret_key
 # Sets environment variables for sensitive configuration
 
+## Frontend Setup and Run Commands
+
+### Prerequisites for Frontend
+# Install Node.js 18+ and npm (comes with Node.js)
+# Download from: https://nodejs.org/
+
+# Install Angular CLI globally (if not already installed)
+npm install -g @angular/cli@17
+# Installs Angular CLI version 17 globally for project management
+
+### 1. Navigate to frontend directory
+cd frontend
+# Changes to the frontend directory
+
+### 2. Install Angular dependencies
+npm install
+# Installs all Node.js packages listed in package.json
+
+### 3. Run Angular development server
+ng serve
+# Starts the Angular development server on http://localhost:4200
+# Automatically reloads on file changes
+
+### 4. Run with proxy configuration (recommended)
+ng serve --proxy-config proxy.conf.json
+# Runs Angular with proxy to backend API to avoid CORS issues
+# Proxies API calls to http://localhost:8080
+
+### 5. Run on different port (if 4200 is occupied)
+ng serve --port 4201
+# Runs Angular on port 4201 instead of default 4200
+
+### 6. Build for production
+ng build --configuration production
+# Builds the application for production deployment
+# Output goes to dist/ directory
+
+### 7. Run production build locally
+ng serve --configuration production
+# Serves the production build locally for testing
+
+### 8. Generate new component
+ng generate component my-component
+# Creates a new Angular component with files and updates app.module.ts
+
+### 9. Generate new service
+ng generate service my-service
+# Creates a new Angular service for API calls or business logic
+
+### 10. Run Angular tests
+ng test
+# Runs unit tests using Karma and Jasmine
+
+### 11. Run Angular linting
+ng lint
+# Checks code quality and style using ESLint
+
+### 12. Update Angular dependencies
+ng update
+# Updates Angular and its dependencies to latest versions
+
+### 13. View Angular CLI help
+ng help
+# Shows all available Angular CLI commands
+
+## Full Stack Development Commands
+
+### Run Backend and Frontend Simultaneously
+# Terminal 1: Start Backend
+mvn spring-boot:run
+
+# Terminal 2: Start Frontend
+cd frontend && ng serve --proxy-config proxy.conf.json
+
+# Both will be running:
+# Backend: http://localhost:8080
+# Frontend: http://localhost:4200
+
 ## Quick Start (All-in-one command)
 mvn clean install && mvn spring-boot:run
 # Builds and runs the application in one command (after database setup)
