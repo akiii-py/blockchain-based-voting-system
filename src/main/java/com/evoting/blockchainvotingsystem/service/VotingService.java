@@ -53,11 +53,8 @@ public class VotingService {
             throw new RuntimeException("Election is not active");
         }
 
-        Election election = electionOpt.get();
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(election.getStartTime()) || now.isAfter(election.getEndTime())) {
-            throw new RuntimeException("Election is not currently running");
-        }
+        // Time-window validation removed; active flag governs voter eligibility
+        electionOpt.get();
 
         // Check if candidate exists in the election
         Optional<Candidate> candidateOpt = candidateRepository.findById(candidateId);

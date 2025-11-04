@@ -1,6 +1,5 @@
 package com.evoting.blockchainvotingsystem.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +21,8 @@ public class ElectionService {
         this.candidateRepository = candidateRepository;
     }
 
-    public Election createElection(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
-        Election election = new Election(title, description, startTime, endTime, false);
+    public Election createElection(String title, String description) {
+        Election election = new Election(title, description, false);
         return electionRepository.save(election);
     }
 
@@ -42,6 +41,10 @@ public class ElectionService {
         return electionRepository.findByIsActiveTrue();
     }
 
+    public List<Election> getAllElections() {
+        return electionRepository.findAll();
+    }
+
     public Optional<Election> getElectionById(Long id) {
         return electionRepository.findById(id);
     }
@@ -50,21 +53,27 @@ public class ElectionService {
         return candidateRepository.findByElection_Id(electionId);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void activateElection(Long electionId) {
         Optional<Election> electionOpt = electionRepository.findById(electionId);
-        if (electionOpt.isPresent()) {
-            Election election = electionOpt.get();
-            election.setActive(true);
-            electionRepository.save(election);
+        if (electionOpt.isEmpty()) {
+            throw new RuntimeException("Election not found: " + electionId);
         }
+        Election election = electionOpt.get();
+        election.setActive(true);
+        electionRepository.save(election);
+        electionRepository.flush(); // Force immediate database write
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void deactivateElection(Long electionId) {
         Optional<Election> electionOpt = electionRepository.findById(electionId);
-        if (electionOpt.isPresent()) {
-            Election election = electionOpt.get();
-            election.setActive(false);
-            electionRepository.save(election);
+        if (electionOpt.isEmpty()) {
+            throw new RuntimeException("Election not found: " + electionId);
         }
+        Election election = electionOpt.get();
+        election.setActive(false);
+        electionRepository.save(election);
+        electionRepository.flush(); // Force immediate database write
     }
 }

@@ -40,13 +40,20 @@ public class VotingController {
     @PostMapping("/vote")
     public ResponseEntity<Vote> castVote(@RequestParam Long candidateId,
                                         @RequestParam Long electionId,
+                                        @RequestParam(required = false) Long userId,
                                         Authentication authentication) {
-        String username = authentication.getName();
-        Long userId = userRepository.findByUsername(username)
-                .map(User::getId)
-                .orElseThrow(() -> new RuntimeException("Authenticated user not found: " + username));
+        Long resolvedUserId = userId;
+        if (resolvedUserId == null) {
+            if (authentication == null) {
+                return ResponseEntity.status(401).build();
+            }
+            String username = authentication.getName();
+            resolvedUserId = userRepository.findByUsername(username)
+                    .map(User::getId)
+                    .orElseThrow(() -> new RuntimeException("Authenticated user not found: " + username));
+        }
 
-        Vote vote = votingService.castVote(userId, candidateId, electionId);
+        Vote vote = votingService.castVote(resolvedUserId, candidateId, electionId);
         return ResponseEntity.ok(vote);
     }
 

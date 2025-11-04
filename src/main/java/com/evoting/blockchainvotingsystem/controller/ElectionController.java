@@ -1,6 +1,5 @@
 package com.evoting.blockchainvotingsystem.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -33,6 +32,13 @@ public class ElectionController {
         return ResponseEntity.ok(elections);
     }
 
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Election>> getAllElections() {
+        List<Election> elections = electionService.getAllElections();
+        return ResponseEntity.ok(elections);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Election> getElectionById(@PathVariable Long id) {
         return electionService.getElectionById(id)
@@ -49,12 +55,8 @@ public class ElectionController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Election> createElection(@RequestParam String title,
-                                                  @RequestParam String description,
-                                                  @RequestParam String startTime,
-                                                  @RequestParam String endTime) {
-        LocalDateTime start = LocalDateTime.parse(startTime);
-        LocalDateTime end = LocalDateTime.parse(endTime);
-        Election election = electionService.createElection(title, description, start, end);
+                                                  @RequestParam String description) {
+        Election election = electionService.createElection(title, description);
         return ResponseEntity.ok(election);
     }
 

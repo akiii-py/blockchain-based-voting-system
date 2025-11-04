@@ -1,6 +1,5 @@
 package com.evoting.blockchainvotingsystem.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,12 +57,8 @@ public class AdminController {
 
     @PostMapping("/elections")
     public ResponseEntity<Election> createElection(@RequestParam String title,
-                                                  @RequestParam String description,
-                                                  @RequestParam String startTime,
-                                                  @RequestParam String endTime) {
-        LocalDateTime start = LocalDateTime.parse(startTime);
-        LocalDateTime end = LocalDateTime.parse(endTime);
-        Election election = electionService.createElection(title, description, start, end);
+                                                  @RequestParam String description) {
+        Election election = electionService.createElection(title, description);
         return ResponseEntity.ok(election);
     }
 

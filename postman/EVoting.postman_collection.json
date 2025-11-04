@@ -180,6 +180,148 @@
         ],
         "url": { "raw": "{{baseUrl}}/voting/election/{{electionId}}/votes", "host": ["{{baseUrl}}"], "path": ["voting", "election", "{{electionId}}", "votes"] }
       }
+    },
+    {
+      "name": "Voting - Check User Vote Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/voting/user/{{userId}}/election/{{electionId}}/status", "host": ["{{baseUrl}}"], "path": ["voting", "user", "{{userId}}", "election", "{{electionId}}", "status"] }
+      }
+    },
+    {
+      "name": "Voting - Get User Vote",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/voting/user/{{userId}}/election/{{electionId}}", "host": ["{{baseUrl}}"], "path": ["voting", "user", "{{userId}}", "election", "{{electionId}}"] }
+      }
+    },
+    {
+      "name": "Voting - Verify Vote Receipt",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/voting/verify/{{voteHash}}", "host": ["{{baseUrl}}"], "path": ["voting", "verify", "{{voteHash}}"] }
+      }
+    },
+    {
+      "name": "Voting - Get Election Bulletin Board",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/voting/bulletin-board/election/{{electionId}}", "host": ["{{baseUrl}}"], "path": ["voting", "bulletin-board", "election", "{{electionId}}"] }
+      }
+    },
+    {
+      "name": "Voting - Verify Election Results",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/voting/results/election/{{electionId}}/verify", "host": ["{{baseUrl}}"], "path": ["voting", "results", "election", "{{electionId}}", "verify"] }
+      }
+    },
+    {
+      "name": "Voting - Get Public Key",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/voting/public-key", "host": ["{{baseUrl}}"], "path": ["voting", "public-key"] }
+      }
+    },
+    {
+      "name": "Admin - Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {"key": "username", "value": "voter2"},
+            {"key": "password", "value": "voter123"},
+            {"key": "email", "value": "voter2@example.com"},
+            {"key": "fullName", "value": "Jane Smith"},
+            {"key": "voterId", "value": "VOTER002"},
+            {"key": "role", "value": "USER"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Admin - Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    },
+    {
+      "name": "Admin - Get User by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}"] }
+      }
+    },
+    {
+      "name": "Admin - Deactivate Election",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/admin/elections/{{electionId}}/deactivate", "host": ["{{baseUrl}}"], "path": ["admin", "elections", "{{electionId}}", "deactivate"] }
+      }
+    },
+    {
+      "name": "Elections - Create Election (Admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+        ],
+        "url": { "raw": "{{baseUrl}}/elections", "host": ["{{baseUrl}}"], "path": ["elections"] },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {"key": "title", "value": "Presidential Election"},
+            {"key": "description", "value": "Choose the president"},
+            {"key": "startTime", "value": "2025-01-01T09:00:00"},
+            {"key": "endTime", "value": "2025-01-01T17:00:00"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Elections - Deactivate Election",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/elections/{{electionId}}/deactivate", "host": ["{{baseUrl}}"], "path": ["elections", "{{electionId}}", "deactivate"] }
+      }
+    },
+    {
+      "name": "Elections - Get Election Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/elections/{{electionId}}", "host": ["{{baseUrl}}"], "path": ["elections", "{{electionId}}"] }
+      }
     }
   ]
 }

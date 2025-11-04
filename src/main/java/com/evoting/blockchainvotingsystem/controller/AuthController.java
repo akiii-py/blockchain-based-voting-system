@@ -1,5 +1,9 @@
 package com.evoting.blockchainvotingsystem.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,9 +21,6 @@ import com.evoting.blockchainvotingsystem.service.UserService;
 import com.evoting.blockchainvotingsystem.util.JwtTokenProvider;
 
 import jakarta.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -71,15 +72,19 @@ public class AuthController {
             role = "ADMIN";
         }
 
-        User user = userService.registerUser(
-            registerRequest.getUsername(),
-            registerRequest.getPassword(),
-            registerRequest.getEmail(),
-            registerRequest.getFullName(),
-            registerRequest.getVoterId(),
-            role
-        );
+        try {
+            User user = userService.registerUser(
+                registerRequest.getUsername(),
+                registerRequest.getPassword(),
+                registerRequest.getEmail(),
+                registerRequest.getFullName(),
+                registerRequest.getVoterId(),
+                role
+            );
 
-        return ResponseEntity.ok(user);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

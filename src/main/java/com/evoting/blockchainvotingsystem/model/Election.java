@@ -1,6 +1,5 @@
 package com.evoting.blockchainvotingsystem.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -27,11 +26,7 @@ public class Election {
     @Column(length = 1000)
     private String description;
 
-    @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
-
-    @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    // Note: time-window removed; elections are governed solely by active flag
 
     @Column(name = "is_active")
     private boolean isActive;
@@ -42,11 +37,9 @@ public class Election {
     public Election() {
     }
 
-    public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime, boolean isActive) {
+    public Election(String title, String description, boolean isActive) {
         this.title = title;
         this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.isActive = isActive;
     }
 
@@ -75,21 +68,6 @@ public class Election {
         this.description = description;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
 
     public boolean isActive() {
         return isActive;

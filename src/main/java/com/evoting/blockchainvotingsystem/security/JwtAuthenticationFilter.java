@@ -32,13 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // Skip JWT processing for permitAll endpoints
+        // Skip JWT processing for auth endpoints
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/api/voting/vote") || requestURI.equals("/voting/vote")) {
+        if (requestURI.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // Process JWT for all protected endpoints
         try {
             String jwt = getJwtFromRequest(request);
 

@@ -104,6 +104,13 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- Gson for JSON parsing in Swing client -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -123,6 +130,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Plugin to run Swing client with proper classpath -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>com.evoting.swingclient.EVotingClient</mainClass>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
             </plugin>
         </plugins>
     </build>
