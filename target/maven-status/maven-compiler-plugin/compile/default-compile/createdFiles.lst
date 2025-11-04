@@ -1,4 +1,6 @@
+com/evoting/blockchainvotingsystem/service/BlockchainService.class
 com/evoting/blockchainvotingsystem/security/JwtAuthenticationFilter.class
+com/evoting/blockchainvotingsystem/service/BulletinBoardService$BulletinBoardEntry.class
 com/evoting/blockchainvotingsystem/model/Candidate.class
 com/evoting/blockchainvotingsystem/util/JwtTokenProvider.class
 com/evoting/blockchainvotingsystem/controller/AdminController.class
@@ -10,6 +12,7 @@ com/evoting/blockchainvotingsystem/controller/ElectionController.class
 com/evoting/blockchainvotingsystem/repository/VoteRepository.class
 com/evoting/blockchainvotingsystem/dto/RegisterRequest.class
 com/evoting/blockchainvotingsystem/dto/LoginRequest.class
+com/evoting/blockchainvotingsystem/service/ReceiptService.class
 com/evoting/blockchainvotingsystem/config/CorsConfig$1.class
 com/evoting/blockchainvotingsystem/BlockchainVotingSystemApplication.class
 com/evoting/blockchainvotingsystem/config/SecurityConfig.class
@@ -20,6 +23,8 @@ com/evoting/blockchainvotingsystem/service/CustomUserDetailsService.class
 com/evoting/blockchainvotingsystem/service/ElectionService.class
 com/evoting/blockchainvotingsystem/repository/ElectionRepository.class
 com/evoting/blockchainvotingsystem/controller/VotingController.class
+com/evoting/blockchainvotingsystem/service/BulletinBoardService.class
 com/evoting/blockchainvotingsystem/repository/UserRepository.class
+com/evoting/blockchainvotingsystem/config/Web3jConfig.class
 com/evoting/blockchainvotingsystem/model/Vote.class
 com/evoting/blockchainvotingsystem/config/CorsConfig.class

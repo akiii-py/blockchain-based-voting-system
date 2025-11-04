@@ -23,13 +23,21 @@ public class VotingService {
     private final UserRepository userRepository;
     private final CandidateRepository candidateRepository;
     private final ElectionRepository electionRepository;
+    private final BlockchainService blockchainService;
+    private final ReceiptService receiptService;
+    private final BulletinBoardService bulletinBoardService;
 
     public VotingService(VoteRepository voteRepository, UserRepository userRepository,
-                        CandidateRepository candidateRepository, ElectionRepository electionRepository) {
+                        CandidateRepository candidateRepository, ElectionRepository electionRepository,
+                        BlockchainService blockchainService, ReceiptService receiptService,
+                        BulletinBoardService bulletinBoardService) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
         this.candidateRepository = candidateRepository;
         this.electionRepository = electionRepository;
+        this.blockchainService = blockchainService;
+        this.receiptService = receiptService;
+        this.bulletinBoardService = bulletinBoardService;
     }
 
     @Transactional
@@ -57,12 +65,31 @@ public class VotingService {
             throw new RuntimeException("Invalid candidate for this election");
         }
 
-        // Simulate blockchain vote casting
-        String transactionHash = "simulated_tx_hash_" + System.currentTimeMillis();
+        // Generate vote hash for cryptographic receipt
+        String timestamp = LocalDateTime.now().toString();
+        String voteHash = receiptService.generateVoteHash(userId, candidateId, electionId, timestamp);
 
-        // Save vote in database
+        // Cast vote on blockchain
+        String transactionHash = blockchainService.castVoteOnBlockchain(
+            electionId, candidateId, voteHash).join();
+
+        // Get current block number
+        Long blockNumber = blockchainService.getBlockNumber().join().longValue();
+
+        // Generate cryptographic receipt
+        String receiptSignature = receiptService.generateReceipt(voteHash, transactionHash);
+
+        // Save vote in database with cryptographic data
         Vote vote = new Vote(userId, candidateId, electionId, transactionHash);
+        vote.setVoteHash(voteHash);
+        vote.setReceiptSignature(receiptSignature);
+        vote.setPublicKey(receiptService.getPublicKey());
+        vote.setBlockNumber(blockNumber);
+        vote.setVerified(true); // Initially verified since we just created it
         vote = voteRepository.save(vote);
+
+        // Publish vote to public bulletin board for transparency
+        bulletinBoardService.publishVoteToBulletinBoard(vote);
 
         // Update user's vote status
         Optional<User> userOpt = userRepository.findById(userId);

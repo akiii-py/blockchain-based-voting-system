@@ -38,6 +38,15 @@ public class Vote {
     @Column(name = "is_verified")
     private boolean isVerified = false;
 
+    @Column(name = "vote_hash")
+    private String voteHash;
+
+    @Column(name = "receipt_signature")
+    private String receiptSignature;
+
+    @Column(name = "public_key")
+    private String publicKey;
+
     public Vote() {
     }
 
@@ -112,5 +121,29 @@ public class Vote {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public String getVoteHash() {
+        return voteHash;
+    }
+
+    public void setVoteHash(String voteHash) {
+        this.voteHash = voteHash;
+    }
+
+    public String getReceiptSignature() {
+        return receiptSignature;
+    }
+
+    public void setReceiptSignature(String receiptSignature) {
+        this.receiptSignature = receiptSignature;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }
