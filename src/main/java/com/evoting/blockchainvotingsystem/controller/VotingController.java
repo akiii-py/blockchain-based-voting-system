@@ -40,17 +40,24 @@ public class VotingController {
     @PostMapping("/vote")
     public ResponseEntity<Vote> castVote(@RequestParam Long candidateId,
                                         @RequestParam Long electionId,
-                                        @RequestParam(required = false) Long userId,
-                                        Authentication authentication) {
+                                        @RequestParam(required = false) Long userId) {
         Long resolvedUserId = userId;
+        
+        // Try to get user from SecurityContext if userId not provided
         if (resolvedUserId == null) {
-            if (authentication == null) {
-                return ResponseEntity.status(401).build();
+            org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            
+            if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+                String username = auth.getName();
+                resolvedUserId = userRepository.findByUsername(username)
+                        .map(User::getId)
+                        .orElse(null);
             }
-            String username = authentication.getName();
-            resolvedUserId = userRepository.findByUsername(username)
-                    .map(User::getId)
-                    .orElseThrow(() -> new RuntimeException("Authenticated user not found: " + username));
+        }
+        
+        if (resolvedUserId == null) {
+            return ResponseEntity.status(401).body(null);
         }
 
         Vote vote = votingService.castVote(resolvedUserId, candidateId, electionId);

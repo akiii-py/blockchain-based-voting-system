@@ -189,14 +189,13 @@ public class VoteDialog extends JDialog {
                 @Override
                 protected Vote doInBackground() throws Exception {
                     Long userId = parent.getCurrentUser() != null ? parent.getCurrentUser().getId() : null;
-                    try {
-                        if (userId != null) {
-                            return VotingService.castVote(userId, candidateId, election.getId(), parent.getAuthToken());
-                        }
-                    } catch (Exception ex) {
-                        // fallback below
+                    if (userId == null) {
+                        throw new Exception("User not logged in. Please log in again.");
                     }
-                    return VotingService.castVote(candidateId, election.getId(), parent.getAuthToken());
+                    if (parent.getAuthToken() == null || parent.getAuthToken().isEmpty()) {
+                        throw new Exception("Authentication token missing. Please log in again.");
+                    }
+                    return VotingService.castVote(userId, candidateId, election.getId(), parent.getAuthToken());
                 }
                 
                 @Override

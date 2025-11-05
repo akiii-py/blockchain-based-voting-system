@@ -31,16 +31,17 @@ public class SecurityConfig {
         http
             .cors().and()
             .csrf().disable()
-            .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-            .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
                 // matchers are evaluated against paths WITHOUT context-path, so use "/auth/**"
                 .requestMatchers("/auth/**", "/public/**").permitAll()
-                .anyRequest().authenticated();
+                .requestMatchers("/voting/vote").permitAll() // Allow voting with userId parameter
+                .anyRequest().authenticated()
+            .and()
+            .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

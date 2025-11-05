@@ -12,14 +12,10 @@ public class VotingService {
     
     private static final Type VOTE_LIST_TYPE = new TypeToken<List<Vote>>(){}.getType();
     
-    public static Vote castVote(Long candidateId, Long electionId, String token) throws IOException {
-        // Send as x-www-form-urlencoded; auth token should resolve user
-        String formData = "candidateId=" + ApiService.encode(String.valueOf(candidateId)) +
-                          "&electionId=" + ApiService.encode(String.valueOf(electionId));
-        return ApiService.postForm("/voting/vote", formData, Vote.class, token);
-    }
-
     public static Vote castVote(Long userId, Long candidateId, Long electionId, String token) throws IOException {
+        if (userId == null) {
+            throw new IOException("User ID is required to vote");
+        }
         String formData = "userId=" + ApiService.encode(String.valueOf(userId)) +
                           "&candidateId=" + ApiService.encode(String.valueOf(candidateId)) +
                           "&electionId=" + ApiService.encode(String.valueOf(electionId));
